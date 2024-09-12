@@ -2,7 +2,7 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master]
 
 jobs:
   test:
@@ -33,10 +33,10 @@ jobs:
         export_default_credentials: true
     - name: Deploy to Cloud Composer
       run: |
-        gcloud composer environments update lag-house-composer \
+        gcloud composer environments update lag-house-composer-1 \
           --location us-central1 \
           --update-pypi-packages-from-file requirements.txt
         gcloud composer environments storage dags import \
-          --environment lag-house-composer \
+          --environment lag-house-composer-1 \
           --location us-central1 \
           --source dags/
