@@ -56,7 +56,7 @@ wait_for_rental_houses = ExternalTaskSensor(
 
 run_dbt_models = BashOperator(
     task_id='run_dbt_models',
-    bash_command= 'dbt run --profiles-dir /home/airflow/gcs/data/lag_house_dbt --project-dir /home/airflow/gcs/data/lag_house_dbt',
+    bash_command= 'dbt run --profiles-dir /home/airflow/gcs/data/dbt/lag_house_dbt --project-dir /home/airflow/gcs/data/dbt/lag_house_dbt',
     dag=dag
 )
 

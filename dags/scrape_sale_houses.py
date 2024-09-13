@@ -5,8 +5,8 @@ from datetime import datetime, timedelta
 from airflow.utils.dates import days_ago
 from airflow.operators.python import PythonOperator
 from airflow.operators.empty import EmptyOperator
-from scripts.bq_utils import load_schema
-from scripts.house_scrapper import scrape_and_upload
+from .scripts.bq_utils import load_schema
+from .scripts.house_scrapper import scrape_and_upload
 import time
 
 
