@@ -45,9 +45,15 @@ def extract_listing_data(listings: List[BeautifulSoup]) -> List[Dict[str, str]]:
     for listing in listings:
         data = dict()
         some_soup = BeautifulSoup(listing.content, "lxml")
-        data["location"] = some_soup.find("address").text.strip()
-        data['price'] = some_soup.find('span', class_="price", itemprop='price')['content']
-        data['currency'] = some_soup.find('span', class_="price",itemprop="priceCurrency")['content']
+       
+        data["location"] = some_soup.find("address").text.strip() if some_soup.find("address") else "N/A"
+        
+        price_element = some_soup.find('span', class_="price", itemprop='price')
+        data['price'] = price_element['content'] if price_element else "N/A"
+        
+        currency_element = some_soup.find('span', class_="price", itemprop="priceCurrency")
+        data['currency'] = currency_element['content'] if currency_element else "N/A"
+
 
         status = (None,)
         bedrooms = (None,)
