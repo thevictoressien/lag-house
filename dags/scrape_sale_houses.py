@@ -20,7 +20,7 @@ tags = [f"{category}", "scrape", "raw", "full load"]
 file_name = f"{category}_listings{time.strftime('%d-%m-%Y %H:%M:%S')}"
 
 # GCS vars
-GCP_CONNECTION_ID = Variable.get("google_conn")
+# GCP_CONNECTION_ID = Variable.get("google_conn")
 BQ_PROJECT_ID =  Variable.get("project_id") 
 BQ_DATASET_ID = Variable.get("dataset_id")
 BQ_TABLE_ID = f"{city}_{category}_listings_raw"
@@ -78,7 +78,7 @@ gcs_to_bigquery = GCSToBigQueryOperator(
     schema_fields= load_schema(bq_schema),
     create_disposition="CREATE_IF_NEEDED",
     write_disposition="WRITE_TRUNCATE",
-    gcp_conn_id=GCP_CONNECTION_ID,
+    # gcp_conn_id=GCP_CONNECTION_ID,
     dag=dag,
 )
 
