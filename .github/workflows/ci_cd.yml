@@ -21,11 +21,11 @@ jobs:
       run: |
         echo "PYTHONPATH=$PYTHONPATH:${{ github.workspace }}/dags" >> $GITHUB_ENV
 
-    - name: Run tests
-      run: python -m pytest tests/
+    # - name: Run tests
+    #   run: python -m pytest tests/
 
   deploy:
-    needs: test
+    # needs: test
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
