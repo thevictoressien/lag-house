@@ -66,7 +66,7 @@ scrape_to_gcs = PythonOperator(
         'category': category,
         'city': city,
         'start_page': 1,
-        'end_page': 10,
+        'end_page': 1131,
     },
     dag=dag,
 )
