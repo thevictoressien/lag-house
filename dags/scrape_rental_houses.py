@@ -17,7 +17,7 @@ dag_name = f"{city}_{category}_listings_full_load"
 description = f"ELT DAG for scraping and loading {category} listings from {base_url} loading to GCS and then to BigQuery"
 schedule_interval = "0 0 31 * *" # the 31st day of every month
 tags = [f"{category}", "scrape", "raw", "full load"]
-file_name = f"{category}_listings{time.strftime('%d-%m-%Y %H:%M:%S')}"
+file_name = f"{category}_listings{time.strftime('%d-%m-%Y')}"
 
 # GCS vars
 # GCP_CONNECTION_ID = Variable.get("google_conn")

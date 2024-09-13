@@ -13,7 +13,6 @@ attrs
 babel
 backoff
 beautifulsoup4
-black
 blinker
 bs4
 cachelib
