@@ -21,9 +21,6 @@ jobs:
       run: |
         echo "PYTHONPATH=$PYTHONPATH:${{ github.workspace }}/dags" >> $GITHUB_ENV
 
-    # - name: Run tests
-    #   run: python -m pytest tests/
-
   deploy:
     needs: test
     runs-on: ubuntu-latest
@@ -43,4 +40,20 @@ jobs:
         gcloud composer environments storage dags import \
           --environment lag-house-composer-1 \
           --location us-central1 \
-          --source dags/
+          --source dags/ \
+          --destination /
+    - name: Copy dbt models to Cloud Composer
+      run: |
+        gcloud composer environments storage data import \
+          --environment lag-house-composer-1 \
+          --location us-central1 \
+          --source lag_house_dbt/ \
+          --destination dbt/
+    - name: Create and copy key file to Cloud Composer
+      run: |
+        echo '${{ secrets.GCP_SA_KEY }}' > key.json
+        gcloud composer environments storage data import \
+          --environment lag-house-composer-1 \
+          --location us-central1 \
+          --source key.json \
+          --destination config/
