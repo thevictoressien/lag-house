@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: raw
+    project: vee-dee
+    dataset: listings_raw
+    tables:
+      - name: lagos_for_sale_listings_raw
+      - name: lagos_for_rent_listings_raw
+    loader: bigquery
