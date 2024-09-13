@@ -47,7 +47,10 @@ jobs:
         gcloud composer environments update lag-house-composer-1 \
           --location us-central1 \
           --update-pypi-packages-from-file requirements.txt
-        gcloud composer environments storage dags import \
+      
+    - name: Copy DAGs to Cloud Composer
+      run: |  
+          gcloud composer environments storage dags import \
           --environment lag-house-composer-1 \
           --location us-central1 \
           --source dags/ \
