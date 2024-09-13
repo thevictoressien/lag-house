@@ -7,8 +7,7 @@ import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
 from dags.scripts.gcp_manager import GCSManager
-# import argparse
-import scripts.config
+from dags.scripts import config
 
 # Configure logging
 logging.basicConfig(
@@ -102,7 +101,7 @@ def extract_listing_data(listings: List[BeautifulSoup]) -> List[Dict[str, str]]:
 
 def upload_to_gcs(bucket_name: str, file_name: str, csv_content: str) -> None:
     """Upload CSV content to Google Cloud Storage."""
-    gcs_client = GCSManager(project_id=scripts.config.PROJECT_ID)
+    gcs_client = GCSManager(project_id=config.PROJECT_ID)
 
     gcs_client.upload_file_from_string(
         bucket_name=bucket_name,
