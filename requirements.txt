@@ -43,7 +43,7 @@ dbt-semantic-interfaces==0.5.1
 decorator==5.1.1
 deepdiff==7.0.1
 Deprecated==1.2.14
-dill==0.3.8
+dill
 dnspython==2.6.1
 docstring_parser==0.16
 docutils==0.21.2
