@@ -2,7 +2,7 @@ version: 2
 
 sources:
   - name: raw
-    project: vee-dee
+    project: vee-de
     dataset: listings_raw
     tables:
       - name: lagos_for_sale_listings_raw

@@ -32,7 +32,17 @@ jobs:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
         service_account_key: ${{ secrets.GCP_SA_KEY }}
         export_default_credentials: true    
+    - name: Check if requirements.txt changed
+      id: requirements_check
+      run: |
+          if git diff --name-only HEAD~1 HEAD | grep 'requirements.txt'; then
+            echo "requirements_changed=true" >> $GITHUB_ENV
+          else
+            echo "requirements_changed=false" >> $GITHUB_ENV
+          fi
+      
     - name: Deploy to Cloud Composer
+      if: env.requirements_changed == 'true'
       run: |
         gcloud composer environments update lag-house-composer-1 \
           --location us-central1 \
@@ -42,6 +52,7 @@ jobs:
           --location us-central1 \
           --source dags/ \
           --destination /
+      
     - name: Copy dbt models to Cloud Composer
       run: |
         gcloud composer environments storage data import \
