@@ -47,6 +47,8 @@ def extract_listing_data(listings: List[BeautifulSoup]) -> List[Dict[str, str]]:
         data = dict()
         some_soup = BeautifulSoup(listing.content, "lxml")
         data["location"] = some_soup.find("address").text.strip()
+        data['price'] = some_soup.find('span', class_="price", itemprop='price')['content']
+        data['currency'] = some_soup.find('span', class_="price",itemprop="priceCurrency")['content']
 
         status = (None,)
         bedrooms = (None,)
@@ -56,6 +58,8 @@ def extract_listing_data(listings: List[BeautifulSoup]) -> List[Dict[str, str]]:
         is_furnished = ("no",)
         is_serviced = ("no",)
         is_shared = "no"
+        total_area = None
+        covered_area = None
 
         other_headers = some_soup.find_all("td")
         for header in other_headers:
@@ -84,6 +88,12 @@ def extract_listing_data(listings: List[BeautifulSoup]) -> List[Dict[str, str]]:
             elif "Sharing:" in text:
                 is_shared = "yes"
                 data["is_shared"] = is_shared
+            elif 'Total Area:' in text:
+                total_area = text.split(':')[1].strip()
+                data['total_area'] = total_area
+            elif 'Covered Area:' in text:
+                covered_area = text.split(':')[1].strip()
+                data['covered_area'] = covered_area
 
         all_properties.append(data)
 
@@ -133,6 +143,10 @@ def house_scrapper(
         "is_furnished",
         "is_serviced",
         "is_shared",
+        "total_area",
+        "covered_area",
+        "price",
+        "currency",
     ]
     csv_writer.writerow(header_row)
 
