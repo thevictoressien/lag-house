@@ -1,6 +1,7 @@
 import csv
 import io
 import logging
+import time
 from typing import List, Dict, Optional
 from bs4 import BeautifulSoup
 import requests
@@ -119,39 +120,13 @@ def upload_to_gcs(bucket_name: str, file_name: str, csv_content: str) -> None:
     logging.info(f"Data uploaded to GCS bucket '{bucket_name}' as '{file_name}'.")
 
 
-def house_scrapper(
-    bucket_name: str,
-    file_name: str,
-    base_url: str,
-    category: str,
-    city: str,
-    start_page: int = 1,
-    end_page: int = 10,
-) -> None:
-    """Scrape house listings and upload data to GCS as a CSV file."""
-    session = create_session()
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0",
-        "Accept-Encoding": "*",
-        "Connection": "keep-alive",
-    }
-
+def process_chunk(session: requests.Session, headers: Dict[str, str], base_url: str, category: str, city: str, start_page: int, end_page: int) -> str:
     output = io.StringIO()
     csv_writer = csv.writer(output)
     header_row = [
-        "location",
-        "status",
-        "bedrooms",
-        "bathrooms",
-        "toilets",
-        "property_type",
-        "is_furnished",
-        "is_serviced",
-        "is_shared",
-        "total_area",
-        "covered_area",
-        "price",
-        "currency",
+        "location", "status", "bedrooms", "bathrooms", "toilets", "property_type",
+        "is_furnished", "is_serviced", "is_shared", "total_area", "covered_area",
+        "price", "currency",
     ]
     csv_writer.writerow(header_row)
 
@@ -172,19 +147,49 @@ def house_scrapper(
             for link in raw_links
         ]
 
-        listings = [requests.get(f"{base_url}{link}") for link in click_links]
+        listings = [requests.get(f"{base_url}{link}", timeout=30) for link in click_links]
 
         properties = extract_listing_data(listings)
 
         for property_data in properties:
             csv_writer.writerow([property_data.get(key, "") for key in header_row])
-            logging.info(f"Extracted data: {property_data['location']}")
+        
+        logging.info(f"Processed {len(properties)} properties on page {page}")
+        time.sleep(1)  # Add a small delay between pages
 
-    output.seek(0)  # Reset StringIO buffer to the beginning
-    csv_content = output.getvalue()
-    upload_to_gcs(bucket_name, file_name, csv_content)
+    output.seek(0)
+    return output.getvalue()
 
-    logging.info(f"Data uploaded to GCS bucket '{bucket_name}' as '{file_name}'.")
+
+def house_scrapper(
+    bucket_name: str,
+    file_name: str,
+    base_url: str,
+    category: str,
+    city: str,
+    start_page: int,
+    end_page: int,
+    chunk_size: int = 20
+) -> None:
+    """Scrape house listings and upload data to GCS as a CSV file."""
+    session = create_session()
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0",
+        "Accept-Encoding": "*",
+        "Connection": "keep-alive",
+    }
+
+    for chunk_start in range(start_page, end_page + 1, chunk_size):
+        chunk_end = min(chunk_start + chunk_size - 1, end_page)
+        logging.info(f"Processing chunk: pages {chunk_start} to {chunk_end}")
+        
+        csv_content = process_chunk(session, headers, base_url, category, city, chunk_start, chunk_end)
+        
+        chunk_file_name = f"{file_name.split('.')[0]}_{chunk_start}_{chunk_end}.csv"
+        upload_to_gcs(bucket_name, chunk_file_name, csv_content)
+        
+        logging.info(f"Chunk {chunk_start} to {chunk_end} uploaded to GCS bucket '{bucket_name}' as '{chunk_file_name}'.")
+
 
 def scrape_and_upload(**kwargs):
     bucket_name = kwargs.get('bucket_name')
@@ -196,6 +201,8 @@ def scrape_and_upload(**kwargs):
     end_page = kwargs.get('end_page')
 
     house_scrapper(bucket_name, file_name, base_url, category, city, start_page, end_page)
+
+
 
 # def main():
 #     parser = argparse.ArgumentParser(

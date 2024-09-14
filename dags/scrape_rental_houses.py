@@ -75,12 +75,11 @@ scrape_to_gcs = PythonOperator(
 gcs_to_bigquery = GCSToBigQueryOperator(
     task_id=f'gcs_{category}_bigquery',
     bucket=GCS_BUCKET_NAME,
-    source_objects=[file_name],
+    source_objects=[f"{category}/{file_name.split('.')[0]}*.csv"],
     destination_project_dataset_table=f"{BQ_PROJECT_ID}.{BQ_DATASET_ID}.{BQ_TABLE_ID}",
     schema_fields= load_schema(bq_schema),
     create_disposition="CREATE_IF_NEEDED",
     write_disposition="WRITE_TRUNCATE",
-    # gcp_conn_id=GCP_CONNECTION_ID,
     dag=dag,
 )
 
