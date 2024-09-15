@@ -9,7 +9,7 @@ from dags.scripts.bq_utils import load_schema
 from dags.scripts.house_scrapper import scrape_and_upload
 import time
 
-
+execution_date = "{{ ds_nodash }}"
 category = "for_sale"
 base_url = Variable.get("base_url")
 city = Variable.get("city")
@@ -17,7 +17,7 @@ dag_name = f"{city}_{category}_listings_full_load"
 description = f"ELT DAG for scraping and loading {category} listings from {base_url} loading to GCS and then to BigQuery"
 schedule_interval = "0 0 31 * *" # the 31st day of every month
 tags = [f"{category}", "scrape", "raw", "full load"]
-file_name = f"{category}_listings{time.strftime('%d-%m-%Y')}"
+file_name = f"{category}_listings{execution_date}"
 start_page = Variable.get("start_page")
 end_page = Variable.get("end_page")
 
@@ -75,7 +75,8 @@ scrape_to_gcs = PythonOperator(
 gcs_to_bigquery = GCSToBigQueryOperator(
     task_id=f'gcs_{category}_bigquery',
     bucket=GCS_BUCKET_NAME,
-    source_objects=[f"{file_name.split('.')[0]}*.csv"],
+    # source_objects=[f"{file_name.split('.')[0]}*.csv"],
+    source_objects = ['for_sale_listings15-09-2024*.csv'],
     destination_project_dataset_table=f"{BQ_PROJECT_ID}.{BQ_DATASET_ID}.{BQ_TABLE_ID}",
     schema_fields= load_schema(bq_schema),
     create_disposition="CREATE_IF_NEEDED",
