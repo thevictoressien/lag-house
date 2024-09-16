@@ -1,8 +1,13 @@
 name: CI/CD Pipeline
 
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches: [ master]
+    paths:
+      - 'dags/**'
+      - 'lag_house_dbt/**'
+
 
 jobs:
   test:
