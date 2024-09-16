@@ -7,6 +7,7 @@ on:
     paths:
       - 'dags/**'
       - 'lag_house_dbt/**'
+      - '.github/workflows/ci_cd.yml'
 
 
 jobs:
