@@ -4,7 +4,7 @@
 This project develops a robust end-to-end ELT (Extract, Load, Transform) pipeline using Lagos house listings data. The solution leverages Google Cloud Platform services, including Cloud Composer (managed Airflow), Google Cloud Storage, and BigQuery, along with dbt for transformations. A CI/CD pipeline ensures smooth deployment and updates. The primary objective is to derive actionable insights into property prices, features, and locations across Lagos.
 
 ## Data Architecture
-![Data Architecture](assets/data_architecture.png)
+![Data Architecture](assets/data-architecture.png)
 Figure 1: Data Architecture
 
 This project utilizes a fully cloud based architecture, leveraging the following services:
