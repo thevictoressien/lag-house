@@ -8,6 +8,7 @@ on:
       - 'dags/**'
       - 'lag_house_dbt/**'
       - '.github/workflows/ci_cd.yml'
+      - 'tests/**'
 
 
 jobs:
@@ -26,7 +27,9 @@ jobs:
     - name: Add dags to PYTHONPATH
       run: |
         echo "PYTHONPATH=$PYTHONPATH:${{ github.workspace }}/dags" >> $GITHUB_ENV
-
+    - name: Run tests
+      run: |
+        python -m pytest
   deploy:
     needs: test
     runs-on: ubuntu-latest
