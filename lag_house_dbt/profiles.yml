@@ -5,6 +5,7 @@ lag_house_dbt:
       job_execution_timeout_seconds: 300
       job_retries: 1
       keyfile: /home/airflow/gcs/data/config/key.json
+      # keyfile: /Users/victoressien/Desktop/lag-house/keys/vee-de-portfolio.json
       location: US
       method: service-account
       priority: interactive

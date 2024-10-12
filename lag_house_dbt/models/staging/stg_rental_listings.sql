@@ -2,41 +2,41 @@
 
 select
     location,
-    case 
-        when lower(location) like '%ikate%' then 'Ikate'
-        when lower(location) like '%lekki phase 1%' then 'Lekki Phase 1'
-        when lower(location) like '%ikoyi%' then 'Ikoyi'
-        when lower(location) like '%ikota%' then 'Ikota'
-        when lower(location) like '%ajah%' then 'Ajah'
-        when lower(location) like '%ogba%' then 'Ogba'
-        when lower(location) like '%oshodi%' then 'Oshodi'
-        when lower(location) like '%chevron%' then 'Chevron'
-        when lower(location) like '%agungi%' then 'Agungi'
-        when lower(location) like '%oniru%' then 'Oniru'
-        when lower(location) like '%victoria island%' then 'Victoria Island'
-        when lower(location) like '%banana island%' then 'Banana Island'
-        when lower(location) like '%yaba%' then 'Yaba'
-        when lower(location) like '%sangotedo%' then 'Ajah'
-        when lower(location) like '%ikeja gra%' then 'Ikeja'
-        when lower(location) like '%isheri%' then 'Isheri'
-        when lower(location) like '%osapa%' then 'Osapa'
-        when lower(location) like '%ikeja%' then 'Ikeja'
-        when lower(location) like '%maryland%' then 'Maryland'
-        when lower(location) like '%lafiaji%' then 'Lafiaji'
-        when lower(location) like '%orchid%' then 'Orchid'
-        when lower(location) like '%vgc%' then 'VGC'
-        when lower(location) like '%ologolo%' then 'Ologolo'
-        when lower(location) like '%jakande lekki%' then 'Jakande'
-        when lower(location) like '%gbagada%' then 'Gbagada'
-        when lower(location) like '%conservation%' then 'Conservation'
-        when lower(location) like '%shomolu%' then 'Shomolu'
-        when lower(location) like '%carlton%' then 'Chevron'
-        when lower(location) like '%egbeda%' then 'Egbeda'
-        when lower(location) like '%admiralty%' then 'Lekki Phase 1'
-        when lower(location) like '%lakowe%' then 'Lakowe'
-        when lower(location) like '%magodo%' then 'Magodo'
-        when lower(location) like '%lekki%' then 'Lekki'
-        end as neighborhood,
+    -- case 
+    --     when lower(location) like '%ikate%' then 'Ikate'
+    --     when lower(location) like '%lekki phase 1%' then 'Lekki Phase 1'
+    --     when lower(location) like '%ikoyi%' then 'Ikoyi'
+    --     when lower(location) like '%ikota%' then 'Ikota'
+    --     when lower(location) like '%ajah%' then 'Ajah'
+    --     when lower(location) like '%ogba%' then 'Ogba'
+    --     when lower(location) like '%oshodi%' then 'Oshodi'
+    --     when lower(location) like '%chevron%' then 'Chevron'
+    --     when lower(location) like '%agungi%' then 'Agungi'
+    --     when lower(location) like '%oniru%' then 'Oniru'
+    --     when lower(location) like '%victoria island%' then 'Victoria Island'
+    --     when lower(location) like '%banana island%' then 'Banana Island'
+    --     when lower(location) like '%yaba%' then 'Yaba'
+    --     when lower(location) like '%sangotedo%' then 'Ajah'
+    --     when lower(location) like '%ikeja gra%' then 'Ikeja'
+    --     when lower(location) like '%isheri%' then 'Isheri'
+    --     when lower(location) like '%osapa%' then 'Osapa'
+    --     when lower(location) like '%ikeja%' then 'Ikeja'
+    --     when lower(location) like '%maryland%' then 'Maryland'
+    --     when lower(location) like '%lafiaji%' then 'Lafiaji'
+    --     when lower(location) like '%orchid%' then 'Orchid'
+    --     when lower(location) like '%vgc%' then 'VGC'
+    --     when lower(location) like '%ologolo%' then 'Ologolo'
+    --     when lower(location) like '%jakande lekki%' then 'Jakande'
+    --     when lower(location) like '%gbagada%' then 'Gbagada'
+    --     when lower(location) like '%conservation%' then 'Conservation'
+    --     when lower(location) like '%shomolu%' then 'Shomolu'
+    --     when lower(location) like '%carlton%' then 'Chevron'
+    --     when lower(location) like '%egbeda%' then 'Egbeda'
+    --     when lower(location) like '%admiralty%' then 'Lekki Phase 1'
+    --     when lower(location) like '%lakowe%' then 'Lakowe'
+    --     when lower(location) like '%magodo%' then 'Magodo'
+    --     when lower(location) like '%lekki%' then 'Lekki'
+    --     end as neighborhood,
     case 
         when lower(location) like '%lekki%' then 'Eti-Osa'
         when lower(location) like '%ikoyi%' then 'Eti-Osa'
@@ -94,4 +94,10 @@ select
     currency,
     'rent' as listing_type,
 from {{ source('raw', 'lagos_for_rent_listings_raw') }}
-where price not like '%N/A%' and lower(location) like '%lagos%' and lower(property_type) not like '%land%'
+where 
+    price not like '%N/A%' 
+    and 
+    lower(location) like '%lagos%' 
+    and 
+    lower(property_type) not like '%land%' 
+  
